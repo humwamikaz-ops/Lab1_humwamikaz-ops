@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 """Student performance and Grade assesor
 
-Application calculates GPA, flags resubmission students and also evaluates pass and fail status
+Application calculates GPA, flags resubmission students and also evaluates
+pass and fail status
 """
 
 import csv
@@ -10,7 +11,7 @@ import sys
 
 
 def parse_grade_records():
-    """Prompts for target CSV file and extracts assessment records into memory."""
+    """Prompts for target CSV file and extracts assessment records."""
     filetarget = input("Enter path to grades CSV (e.g., grades.csv): ")
 
     if not os.path.exists(filetarget):
@@ -96,11 +97,13 @@ def analyze_academic_standing(dataset):
         return
 
     if round(sum_weight_total, 2) != 40.0:
-        print(f"Error: Summative weight sum is {sum_weight_total}%, expected 40%.")
+        sum_err = f"Summative weight sum is {sum_weight_total}%, expected 40%."
+        print(f"Error: {sum_err}")
         return
 
     if round(form_weight_total, 2) != 60.0:
-        print(f"Error: Formative weight sum is {form_weight_total}%, expected 60%.")
+        form_err = f"Formative weight sum is {form_weight_total}%, expected 60%."
+        print(f"Error: {form_err}")
         return
 
     # Compute category averages
