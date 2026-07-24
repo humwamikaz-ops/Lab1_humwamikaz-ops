@@ -1,3 +1,4 @@
+cat << 'EOF' > grade-evaluator.py
 #!/usr/bin/python3
 """Student performance and Grade assesor
 
@@ -145,3 +146,4 @@ def analyze_academic_standing(dataset):
 if __name__ == "__main__":
     loaded_data = parse_grade_records()
     analyze_academic_standing(loaded_data)
+EOF
