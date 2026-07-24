@@ -1,25 +1,29 @@
 #!/bin/bash
 
-ARCHIVE_DIR="archive"
-ORIGINAL_FILE="grades.csv"
-LOG_FILE="organizer.log"
+ARCHIVE_DIR="./archive"
+LOG_FILE="./organizer.log"
 
 if [ ! -d "$ARCHIVE_DIR" ]; then
     mkdir -p "$ARCHIVE_DIR"
+    echo "$(date '+%Y-%m-%d %H:%M:%S') - Created directory: $ARCHIVE_DIR" >> "$LOG_FILE"
 fi
 
-if [ -f "$ORIGINAL_FILE" ]; then
-    TIMESTAMP=$(date +"%Y%m%d-%H%M%S")
-    ARCHIVED_FILENAME="grades_${TIMESTAMP}.csv"
-    ARCHIVED_PATH="${ARCHIVE_DIR}/${ARCHIVED_FILENAME}"
+found_files=0
+for file in *.csv; do
+    if [ -f "$file" ]; then
+        found_files=1
+        TIMESTAMP=$(date '+%Y%m%d_%H%M%S')
+        FILENAME=$(basename "$file" .csv)
+        NEW_FILENAME="${FILENAME}_${TIMESTAMP}.csv"
 
-    mv "$ORIGINAL_FILE" "$ARCHIVED_PATH"
-    echo "assignment,group,score,weight" > "$ORIGINAL_FILE"
+        mv "$file" "$ARCHIVE_DIR/$NEW_FILENAME"
 
-    LOG_ENTRY="[${TIMESTAMP}] Archived: ${ORIGINAL_FILE} -> ${ARCHIVED_PATH}"
-    echo "$LOG_ENTRY" >> "$LOG_FILE"
-    echo "Successfully archived ${ORIGINAL_FILE} to ${ARCHIVED_PATH}"
-else
-    echo "Error: ${ORIGINAL_FILE} does not exist in current directory."
-    exit 1
+        echo "$(date '+%Y-%m-%d %H:%M:%S') - Archived: $file -> $ARCHIVE_DIR/$NEW_FILENAME" >> "$LOG_FILE"
+        echo "Successfully archived '$file' as '$NEW_FILENAME'."
+    fi
+done
+
+if [ $found_files -eq 0 ]; then
+    echo "No CSV files found to archive."
+    echo "$(date '+%Y-%m-%d %H:%M:%S') - Run complete: No CSV files found." >> "$LOG_FILE"
 fi
